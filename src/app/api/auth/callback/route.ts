@@ -15,14 +15,14 @@ export async function GET(request: Request) {
       const { data: { user } } = await supabase.auth.getUser()
 
       if (user) {
-        const { data: existingUser } = await supabase
+        const { data: existingUser } = await (supabase as any)
           .from('users')
           .select('id')
           .eq('id', user.id)
           .single()
 
         if (!existingUser) {
-          await supabase.from('users').insert({
+          await (supabase as any).from('users').insert({
             id: user.id,
             username: user.user_metadata.user_name || user.email?.split('@')[0] || 'user',
             email: user.email!,
